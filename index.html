@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frans oefenen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
+<style>
+:root{--bg:#EEF0F3;--ink:#3A3F47;--mute:#7D848F;--hi:#FFFFFF;--lo:#D3D8DF;--amber:#EDB49B;--amberInk:#4A2617;--line:#E1E5EA}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Nunito,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:17px;line-height:1.45}
+#app{max-width:480px;margin:0 auto;min-height:100vh;padding:22px 20px 30px;display:flex;flex-direction:column;gap:16px}
+.raised{background:var(--bg);box-shadow:6px 6px 14px var(--lo),-6px -6px 14px var(--hi)}
+.inset{background:var(--bg);box-shadow:inset 3px 3px 8px var(--lo),inset -3px -3px 8px var(--hi)}
+.head{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:var(--mute)}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--mute)}
+.bar{height:10px;border-radius:6px;background:var(--bg);box-shadow:inset 2px 2px 5px var(--lo),inset -2px -2px 5px var(--hi);padding:2px}.bar>div{height:100%;border-radius:4px;transition:width .4s ease}
+h1{margin:10px 0 0;font-size:28px;line-height:1.2;font-weight:600}
+.muted{color:var(--mute)}.small{font-size:14px}.s15{font-size:15px}
+.grow{flex-grow:1;display:flex;flex-direction:column;gap:16px}
+.bottom{margin-top:auto;display:flex;flex-direction:column;gap:12px;padding-top:8px}
+.btn{height:56px;border:none;border-radius:18px;background:var(--amber);color:var(--amberInk);font:inherit;font-weight:700;cursor:pointer;width:100%;box-shadow:6px 6px 14px var(--lo),-6px -6px 14px var(--hi)}
+.btn:disabled{background:var(--bg);color:#A7ADB6;cursor:default;box-shadow:inset 3px 3px 8px var(--lo),inset -3px -3px 8px var(--hi)}
+.btn2{height:56px;border:none;border-radius:18px;background:var(--bg);color:var(--ink);font:inherit;font-weight:600;cursor:pointer;width:100%;box-shadow:6px 6px 14px var(--lo),-6px -6px 14px var(--hi)}
+.link{border:none;background:none;color:var(--mute);font:inherit;font-size:15px;text-decoration:underline;cursor:pointer;padding:10px}
+.list{border-radius:20px;padding:4px 16px;background:var(--bg);box-shadow:6px 6px 14px var(--lo),-6px -6px 14px var(--hi)}
+.row{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}.row:last-child{border-bottom:none}
+.row{cursor:pointer}
+.txt{display:flex;flex-direction:column;flex-grow:1}
+.sr{position:absolute;opacity:0;width:1px;height:1px;margin:0;pointer-events:none}
+.sw{width:48px;height:28px;border-radius:999px;flex:none;position:relative;background:var(--bg);box-shadow:inset 2px 2px 6px var(--lo),inset -2px -2px 6px var(--hi);transition:background .25s ease}
+.sw::after{content:"";position:absolute;top:4px;left:4px;width:20px;height:20px;border-radius:50%;background:var(--bg);box-shadow:2px 2px 5px var(--lo),-1px -1px 3px var(--hi);transition:left .25s ease}
+input:checked + .sw{background:#EDB49B}
+input:checked + .sw::after{left:24px;background:#FFF7F3}
+input:focus-visible + .sw{outline:2px solid #D9906F;outline-offset:2px}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}
+.pills{display:flex;gap:12px}.pill{flex:1;height:46px;border:none;border-radius:16px;background:var(--bg);color:var(--ink);font:inherit;font-weight:600;cursor:pointer;box-shadow:5px 5px 12px var(--lo),-5px -5px 12px var(--hi)}.pill.on{box-shadow:inset 3px 3px 8px var(--lo),inset -3px -3px 8px var(--hi);color:#A0563A}
+.card{background:var(--bg);border-radius:20px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;box-shadow:6px 6px 14px var(--lo),-6px -6px 14px var(--hi)}
+.sent{font-size:21px;font-weight:600;line-height:1.35}
+.opt{min-height:54px;border:none;border-radius:16px;background:var(--bg);color:var(--ink);font:inherit;text-align:left;padding:10px 16px;cursor:pointer;width:100%;box-shadow:5px 5px 12px var(--lo),-5px -5px 12px var(--hi)}
+.opt.right{background:#B5D0BD;color:#22342A;font-weight:600}.opt.wrong{box-shadow:inset 3px 3px 8px var(--lo),inset -3px -3px 8px var(--hi);color:#9A6A5F;text-decoration:line-through}
+.opts{display:flex;flex-direction:column;gap:12px}
+.dropzone{min-height:60px;border-radius:16px;padding:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;box-shadow:inset 3px 3px 8px var(--lo),inset -3px -3px 8px var(--hi)}
+.tiles{display:flex;flex-wrap:wrap;gap:10px}
+.tile{border:none;border-radius:12px;background:var(--bg);color:var(--ink);font:inherit;padding:7px 12px;cursor:pointer;box-shadow:4px 4px 10px var(--lo),-4px -4px 10px var(--hi)}.tile.in{background:var(--amber);color:var(--amberInk);box-shadow:none}
+.inp{height:54px;border:none;border-radius:16px;padding:0 16px;font:inherit;font-size:18px;width:100%;color:var(--ink);background:var(--bg);box-shadow:inset 3px 3px 8px var(--lo),inset -3px -3px 8px var(--hi);outline:none}
+.inp:focus{box-shadow:inset 3px 3px 8px var(--lo),inset -3px -3px 8px var(--hi),0 0 0 2px #F3CDBB}
+.verdict{align-self:flex-start;border-radius:999px;padding:4px 12px;font-weight:700;font-size:15px}
+.v-ok{background:#DCE8DF;color:#2E4636}.v-no{background:#E2E5EA;color:#4A505A}
+.sep{border-top:1px solid var(--line);padding-top:10px}
+.spk{width:38px;height:38px;border-radius:50%;border:none;background:var(--bg);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:none;padding:0;box-shadow:4px 4px 10px var(--lo),-4px -4px 10px var(--hi)}
+.play{width:76px;height:76px;border-radius:50%;border:none;background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;box-shadow:7px 7px 16px var(--lo),-7px -7px 16px var(--hi)}
+.lrow{display:flex;align-items:center;gap:18px}
+.saywrap{display:flex;gap:12px;align-items:flex-start}
+.cheer{font-size:32px;font-weight:700;line-height:1.15}
+.ring{align-self:center;width:150px;height:150px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:8px 8px 18px var(--lo),-8px -8px 18px var(--hi);margin-top:8px}
+.ring>div{width:112px;height:112px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:600;box-shadow:inset 3px 3px 8px var(--lo),inset -3px -3px 8px var(--hi)}
+@media (prefers-reduced-motion: reduce){.bar>div{transition:none}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+class Data {
+  cards() {
+    return [
+      { fr: "parce que", nl: "omdat", ex: "Je reste à la maison parce que je suis malade.", exNl: "Ik blijf thuis omdat ik ziek ben." },
+      { fr: "car", nl: "want", ex: "Je prends un pull, car il fait froid.", exNl: "Ik neem een trui, want het is koud." },
+      { fr: "pendant que", nl: "terwijl (tegelijk)", ex: "Il lit pendant que je cuisine.", exNl: "Hij leest terwijl ik kook." },
+      { fr: "alors que", nl: "terwijl (tegenstelling)", ex: "Il fait beau, alors que la météo annonçait de la pluie.", exNl: "Het is mooi weer, terwijl het weerbericht regen voorspelde." },
+      { fr: "dès que", nl: "zodra", ex: "Appelle-moi dès que tu arrives.", exNl: "Bel me zodra je aankomt." },
+      { fr: "puisque", nl: "aangezien", ex: "Puisque tu es là, tu peux m'aider.", exNl: "Aangezien je er bent, kan je me helpen." },
+      { fr: "sinon", nl: "anders", ex: "Dépêche-toi, sinon on va rater le train.", exNl: "Haast je, anders missen we de trein." }
+    ];
+  }
+
+  topics() {
+    return [
+      { key: "voeg", color: "#F2A38F", name: "Voegwoorden", ex: [
+        { t: "mc", label: "pendant que (terwijl, tegelijk)", q: "Wat betekent «pendant que» hier?", s: "Elle chante pendant qu'elle travaille.", full: "Elle chante pendant qu'elle travaille.", nl: "Ze zingt terwijl ze werkt.", o: ["terwijl (tegelijk)", "omdat", "zodra"], a: 0, tip: "Pendant que: twee dingen gebeuren tegelijk." },
+        { t: "mc", label: "dès que (zodra)", q: "Wat betekent «dès que» hier?", s: "Je t'écris dès que j'ai les résultats.", full: "Je t'écris dès que j'ai les résultats.", nl: "Ik schrijf je zodra ik de resultaten heb.", o: ["aangezien", "zodra", "anders"], a: 1, tip: "Dès que = zodra." },
+        { t: "mc", label: "sinon (anders)", q: "Wat betekent «sinon» hier?", s: "Prends un parapluie, sinon tu seras mouillé.", full: "Prends un parapluie, sinon tu seras mouillé.", nl: "Neem een paraplu, anders word je nat.", o: ["omdat", "terwijl", "anders"], a: 2, tip: "Sinon = anders: wat er gebeurt als je het niet doet." },
+        { t: "mc", label: "parce que (omdat)", q: "Welk woord past?", s: "Je ne viens pas ___ je dois étudier.", full: "Je ne viens pas parce que je dois étudier.", nl: "Ik kom niet omdat ik moet studeren.", o: ["parce que", "sinon", "dès que", "alors que"], a: 0, tip: "Er volgt een reden (omdat): parce que.", why: { 1: "Sinon = anders. Dat geeft geen reden.", 2: "Dès que = zodra. Dat gaat over tijd, niet over een reden.", 3: "Alors que = terwijl (tegenstelling). Hier volgt een reden." } },
+        { t: "mc", label: "alors que (terwijl, tegenstelling)", q: "Welk woord past?", s: "Mon frère adore le sport, ___ moi, je le déteste.", full: "Mon frère adore le sport, alors que moi, je le déteste.", nl: "Mijn broer is gek op sport, terwijl ik er een hekel aan heb.", o: ["pendant que", "alors que", "puisque", "donc"], a: 1, tip: "Tegenstelling: alors que. Tegelijk (in de tijd): pendant que.", why: { 0: "Pendant que is 'terwijl' in de tijd: twee dingen tegelijk. Bv. Je lis pendant qu'il cuisine (ik lees terwijl hij kookt). Hier gaat het om een tegenstelling.", 2: "Puisque = aangezien: een reden. Hier is het een tegenstelling.", 3: "Donc = dus: een gevolg. Hier is het een tegenstelling." } },
+        { t: "mc", label: "puisque (aangezien)", q: "Welk woord past?", s: "___ tu connais la réponse, dis-la-nous !", full: "Puisque tu connais la réponse, dis-la-nous !", nl: "Aangezien je het antwoord kent, zeg het ons!", o: ["Sinon", "Pendant que", "Puisque", "Donc"], a: 2, tip: "Puisque = aangezien: een reden die de ander ook al kent. Kan vooraan in de zin staan.", why: { 0: "Sinon = anders. Dat past niet vooraan in deze zin.", 1: "Pendant que = terwijl (tegelijk). Hier volgt een reden.", 3: "Donc = dus: een gevolg. Hier volgt een reden." } },
+        { t: "mc", label: "sinon (anders)", q: "Welk woord past?", s: "Range ta chambre, ___ tu ne sors pas ce soir.", full: "Range ta chambre, sinon tu ne sors pas ce soir.", nl: "Ruim je kamer op, anders ga je vanavond niet uit.", o: ["parce que", "sinon", "alors que", "dès que"], a: 1, tip: "Sinon = anders.", why: { 0: "Parce que = omdat: een reden. Hier volgt wat er gebeurt als je het niet doet.", 2: "Alors que = terwijl (tegenstelling).", 3: "Dès que = zodra." } },
+        { t: "build", label: "dès que in een zin", q: "Bouw de zin", nl: "Bel me zodra je thuis bent.", tiles: ["tu", "appelle-moi", "à la maison", "dès que", "es", "pendant que"], ans: "appelle-moi dès que tu es à la maison", full: "Appelle-moi dès que tu es à la maison.", tip: "Zodra = dès que. Pendant que zou 'terwijl' betekenen." },
+        { t: "build", label: "pendant que in een zin", q: "Bouw de zin", nl: "Ik lees terwijl hij kookt.", tiles: ["cuisine", "je lis", "alors qu'il", "pendant qu'il"], ans: "je lis pendant qu'il cuisine", full: "Je lis pendant qu'il cuisine.", tip: "Twee dingen tegelijk: pendant que. Alors que zou een tegenstelling zijn. Que + il wordt qu'il." },
+        { t: "type", label: "car (want)", q: "Vul aan", nl: "Ik stop, want ik ben moe.", s: "J'arrête, ___ je suis fatigué.", full: "J'arrête, car je suis fatigué.", accept: ["car"], show: "car", ok2: { "parce que": "In het Frans kan parce que hier ook. Maar de Nederlandse zin zegt 'want', en dat is car." }, tip: "Car = want, parce que = omdat. Car staat na een komma en nooit vooraan in de zin; het is wat formeler. Parce que kan wel vooraan staan en is het antwoord op 'Pourquoi ?'.", why: { "pendant que": "Pendant que = terwijl (tegelijk). Hier volgt een reden." } },
+        { t: "type", label: "alors que (terwijl, tegenstelling)", q: "Vul aan", nl: "Hij is rijk, terwijl zijn broer arm is.", s: "Il est riche, ___ son frère est pauvre.", full: "Il est riche, alors que son frère est pauvre.", accept: ["alors que", "tandis que"], show: "alors que (of: tandis que)", tip: "Tegenstelling (rijk tegenover arm): alors que of tandis que.", why: { "pendant que": "Pendant que is 'terwijl' in de tijd: twee dingen gebeuren tegelijk. Bv. Je fais mes devoirs pendant que ma sœur regarde la télé (ik maak mijn huiswerk terwijl mijn zus tv kijkt). Hier gaat het niet om tijd maar om een tegenstelling.", "parce que": "Parce que = omdat: een reden. Hier is het een tegenstelling." } },
+        { t: "mc", fr2nl: true, label: "alors que in een zin", q: "Wat betekent deze zin?", s: "Il est parti sans rien dire, alors que tout le monde l'attendait.", full: "Il est parti sans rien dire, alors que tout le monde l'attendait.", nl: "Hij vertrok zonder iets te zeggen, terwijl iedereen op hem wachtte.", o: ["Hij vertrok zonder iets te zeggen, terwijl iedereen op hem wachtte.", "Hij vertrok zonder iets te zeggen, omdat iedereen op hem wachtte.", "Hij vertrok zonder iets te zeggen, zodra iedereen op hem wachtte."], a: 0, tip: "Alors que = terwijl (tegenstelling)." }
+      ]},
+      { key: "ww", color: "#DCC6A0", name: "Werkwoorden: tijden", ex: [
+        { t: "type", label: "finir · passé composé", q: "Vul het werkwoord in", tense: "passé composé", s: "Hier, nous ___ (finir) le travail.", full: "Hier, nous avons fini le travail.", nl: "Gisteren hebben we het werk afgemaakt.", accept: ["avons fini"], show: "avons fini", tip: "Passé composé = avoir of être + voltooid deelwoord. finir → fini.", why: { "finissons": "Dat is de présent. Hier (gisteren) vraagt een verleden tijd: passé composé.", "finissions": "Dat is de imparfait. Voor één afgeronde handeling: passé composé." } },
+        { t: "type", label: "jouer · imparfait", q: "Vul het werkwoord in", tense: "imparfait", s: "Quand j'étais petite, je ___ (jouer) souvent dehors.", full: "Quand j'étais petite, je jouais souvent dehors.", nl: "Toen ik klein was, speelde ik vaak buiten.", accept: ["jouais"], show: "jouais", tip: "Een gewoonte in het verleden: imparfait. Stam van nous jouons + -ais.", why: { "ai joué": "Passé composé is voor een afgeronde gebeurtenis. 'Souvent' wijst op een gewoonte: imparfait.", "jouai": "Dat is de passé simple. Hier: imparfait." } },
+        { t: "mc", label: "aller · futur simple", q: "Welke vorm past?", tense: "futur simple", s: "Demain, ils ___ à Paris.", full: "Demain, ils iront à Paris.", nl: "Morgen gaan ze naar Parijs.", o: ["iront", "allaient", "sont allés"], a: 0, tip: "Demain → futur simple. Aller heeft een onregelmatige stam: ir-.", why: { 1: "Allaient is imparfait (verleden). Demain = morgen.", 2: "Sont allés is passé composé (verleden). Demain = morgen." } },
+        { t: "mc", label: "lire · conditionnel", q: "Welke vorm past?", tense: "conditionnel", s: "Si j'avais le temps, je ___ plus.", full: "Si j'avais le temps, je lirais plus.", nl: "Als ik tijd had, zou ik meer lezen.", o: ["lirais", "lirai", "lis"], a: 0, tip: "Si + imparfait → conditionnel in de hoofdzin: je lirais.", why: { 1: "Lirai is futur simple. Na si + imparfait komt de conditionnel (-ais).", 2: "Lis is présent. Na si + imparfait komt de conditionnel." } },
+        { t: "type", label: "venir · passé composé", q: "Vul het werkwoord in", tense: "passé composé (met être)", s: "Elle ___ (venir) hier soir.", full: "Elle est venue hier soir.", nl: "Ze is gisteravond gekomen.", accept: ["est venue"], show: "est venue", tip: "Venir vervoegt met être. Dan past het deelwoord zich aan het onderwerp aan: elle → venue.", why: { "a venu": "Venir gaat met être, niet met avoir.", "est venu": "Bijna. Met être past het deelwoord zich aan: elle → venue (met -e)." } },
+        { t: "mc", label: "faire · subjonctif", q: "Welke vorm past?", tense: "subjonctif", s: "Il faut que tu ___ tes devoirs.", full: "Il faut que tu fasses tes devoirs.", nl: "Je moet je huiswerk maken.", o: ["fasses", "fais", "feras"], a: 0, tip: "Na il faut que volgt de subjonctif: que tu fasses.", why: { 1: "Fais is présent. Na il faut que: subjonctif.", 2: "Feras is futur. Na il faut que: subjonctif." } },
+        { t: "mc", fr2nl: true, label: "je lisais · imparfait", q: "Wat betekent deze zin?", tense: "imparfait", s: "Quand j'étais petite, je lisais beaucoup.", full: "Quand j'étais petite, je lisais beaucoup.", nl: "Toen ik klein was, las ik veel.", o: ["Toen ik klein was, las ik veel.", "Als ik klein ben, lees ik veel.", "Toen ik klein was, zou ik veel lezen."], a: 0, tip: "Lisais is imparfait: een gewoonte in het verleden." },
+        { t: "mc", fr2nl: true, label: "j'achèterais · conditionnel", q: "Wat betekent deze zin?", tense: "conditionnel", s: "Si j'avais de l'argent, j'achèterais une voiture.", full: "Si j'avais de l'argent, j'achèterais une voiture.", nl: "Als ik geld had, zou ik een auto kopen.", o: ["Als ik geld had, zou ik een auto kopen.", "Als ik geld heb, koop ik een auto.", "Toen ik geld had, kocht ik een auto."], a: 0, tip: "Si + imparfait, en dan de conditionnel: j'achèterais = ik zou kopen." },
+        { t: "mc", fr2nl: true, label: "nous partirons · futur simple", q: "Wat betekent deze zin?", tense: "futur simple", s: "Nous partirons demain matin.", full: "Nous partirons demain matin.", nl: "We zullen morgenochtend vertrekken.", o: ["We zullen morgenochtend vertrekken.", "We zijn gisterochtend vertrokken.", "We zouden morgenochtend vertrekken."], a: 0, tip: "Partirons is futur simple: iets wat nog gaat gebeuren." }
+      ]},
+      { key: "vnw", color: "#E9B3CF", name: "Voornaamwoorden (COD / COI)", ex: [
+        { t: "mc", label: "la (COD)", q: "Welk voornaamwoord past?", s: "Tu vois Marie ? — Oui, je ___ vois.", full: "Tu vois Marie ? — Oui, je la vois.", nl: "Zie je Marie? — Ja, ik zie haar.", o: ["la", "lui", "le"], a: 0, tip: "Voir quelqu'un: zonder à, dus een direct voorwerp (COD). Marie → la.", why: { 1: "Lui staat voor à + persoon (COI). Voir heeft geen à.", 2: "Le is mannelijk. Marie → la." } },
+        { t: "mc", label: "lui (COI)", q: "Welk voornaamwoord past?", s: "Tu téléphones à ton père ? — Oui, je ___ téléphone.", full: "Tu téléphones à ton père ? — Oui, je lui téléphone.", nl: "Bel je je vader? — Ja, ik bel hem.", o: ["le", "lui", "leur"], a: 1, tip: "Téléphoner à quelqu'un: met à, dus COI. Eén persoon → lui.", why: { 0: "Le is een direct voorwerp (COD). Téléphoner à → COI → lui.", 2: "Leur is meervoud. Ton père is één persoon → lui." } },
+        { t: "mc", label: "leur (COI, meervoud)", q: "Welk voornaamwoord past?", s: "Tu as parlé à tes amis ? — Oui, je ___ ai parlé.", full: "Tu as parlé à tes amis ? — Oui, je leur ai parlé.", nl: "Heb je met je vrienden gepraat? — Ja, ik heb met hen gepraat.", o: ["les", "leur", "lui"], a: 1, tip: "Parler à + meerdere personen → leur (zonder -s).", why: { 0: "Les is COD. Parler à → COI → leur.", 2: "Lui is enkelvoud. Tes amis → leur." } },
+        { t: "build", label: "le lui (volgorde)", q: "Bouw de zin", nl: "Het boek? Ik geef het aan hem.", tiles: ["donne", "le", "je", "leur", "lui"], ans: "je le lui donne", full: "Le livre ? Je le lui donne.", tip: "Volgorde: le / la / les komen vóór lui / leur. Aan hem = lui (enkelvoud)." },
+        { t: "type", label: "les (COD, meervoud)", q: "Vul het voornaamwoord in", nl: "Die schoenen? Die koop ik morgen.", s: "Ces chaussures ? Je ___ achète demain.", full: "Ces chaussures ? Je les achète demain.", accept: ["les"], show: "les", tip: "Acheter quelque chose: direct voorwerp. Meervoud → les.", why: { "leur": "Leur is voor à + personen. Acheter quelque chose: direct → les.", "la": "La is enkelvoud. Ces chaussures → les." } },
+        { t: "mc", fr2nl: true, label: "leur in een zin", q: "Wat betekent deze zin?", s: "Je leur ai donné mon adresse.", full: "Je leur ai donné mon adresse.", nl: "Ik heb hun mijn adres gegeven.", o: ["Ik heb hun mijn adres gegeven.", "Ik heb hem mijn adres gegeven.", "Ik heb mijn adres van hen gekregen."], a: 0, tip: "Leur = (aan) hen, hun: meervoud. Lui zou 'hem' of 'haar' zijn." }
+      ]},
+      { key: "lw", color: "#9FB4C8", name: "Lidwoorden", ex: [
+        { t: "mc", label: "de l' (partitief)", q: "Welk lidwoord past?", s: "Je bois ___ eau.", full: "Je bois de l'eau.", nl: "Ik drink water.", o: ["de l'", "du", "des"], a: 0, tip: "Een onbepaalde hoeveelheid: partitief. Eau is vrouwelijk en begint met een klinker → de l'.", why: { 1: "Du is voor mannelijke woorden die niet met een klinker beginnen.", 2: "Des is meervoud." } },
+        { t: "mc", label: "de na ontkenning", q: "Welk lidwoord past?", s: "Je ne mange pas ___ viande.", full: "Je ne mange pas de viande.", nl: "Ik eet geen vlees.", o: ["de", "de la", "la"], a: 0, tip: "Na een ontkenning (ne… pas) wordt du / de la / des gewoon de.", why: { 1: "Na ne… pas wordt de la korter: de.", 2: "La is het bepaald lidwoord (het vlees). Hier: geen vlees → de." } },
+        { t: "type", label: "des (onbepaald meervoud)", q: "Vul het lidwoord in", nl: "Ze koopt appels.", s: "Elle achète ___ pommes.", full: "Elle achète des pommes.", accept: ["des"], show: "des", tip: "Onbepaald meervoud: des.", why: { "les": "Les = de (bepaald): de appels. Hier gaat het om zomaar appels → des.", "de": "De gebruik je na een ontkenning of een hoeveelheid. Hier: des." } },
+        { t: "mc", label: "le na aimer", q: "Welk lidwoord past?", s: "J'aime ___ chocolat.", full: "J'aime le chocolat.", nl: "Ik hou van chocolade.", o: ["le", "du", "de"], a: 0, tip: "Na aimer, adorer, détester: le / la / les. Je spreekt over chocolade in het algemeen.", why: { 1: "Du is voor een hoeveelheid (je mange du chocolat). Na aimer: le.", 2: "De gebruik je na een ontkenning of een hoeveelheid." } },
+        { t: "mc", label: "d' na beaucoup", q: "Welk lidwoord past?", s: "Il a beaucoup ___ amis.", full: "Il a beaucoup d'amis.", nl: "Hij heeft veel vrienden.", o: ["d'", "des", "de les"], a: 0, tip: "Na een hoeveelheid (beaucoup, peu, trop, assez): de, of d' voor een klinker.", why: { 1: "Na beaucoup komt geen des, maar de of d'.", 2: "Na beaucoup komt gewoon de of d'." } }
+      ]},
+      { key: "luister", color: "#B9B0DA", name: "Luisteren", sub: "10 oefeningen · voorleesstem van je toestel", ex: [
+        { t: "lmc", label: "luisteren: parce que", q: "Luister en kies de juiste vertaling", full: "Je reste à la maison parce que je suis malade.", nl: "Ik blijf thuis omdat ik ziek ben.", o: ["Ik blijf thuis omdat ik ziek ben.", "Ik ga naar huis omdat ik moe ben.", "Ik blijf thuis hoewel ik ziek ben."], a: 0, tip: "Parce que = omdat." },
+        { t: "ldict", label: "dictee: dès que", q: "Luister en vul het ontbrekende woord in", s: "Appelle-moi ___ tu arrives.", full: "Appelle-moi dès que tu arrives.", nl: "Bel me zodra je aankomt.", accept: ["dès que"], show: "dès que", tip: "Dès que = zodra. Let op het accent: dès.", why: { "des que": "Bijna: dès schrijf je met een accent grave." } },
+        { t: "lrep", label: "nazeggen: alors que", q: "Luister en zeg de zin hardop na", full: "Il fait beau, alors que la météo annonçait de la pluie.", nl: "Het is mooi weer, terwijl het weerbericht regen voorspelde.", tip: "Let op de liaison: alors‿que klinkt als één geheel." },
+        { t: "lmc", label: "luisteren: beaucoup d'amis", q: "Luister en kies de juiste vertaling", full: "Il a beaucoup d'amis.", nl: "Hij heeft veel vrienden.", o: ["Hij heeft veel vrienden.", "Hij heeft weinig vrienden.", "Hij is een goede vriend."], a: 0, tip: "Beaucoup de / d' = veel." },
+        { t: "ldict", label: "dictee: de na ontkenning", q: "Luister en vul het ontbrekende woord in", s: "Je ne mange pas ___ viande.", full: "Je ne mange pas de viande.", nl: "Ik eet geen vlees.", accept: ["de"], show: "de", tip: "Na ne… pas wordt de la gewoon de.", why: { "de la": "Na ne… pas wordt de la korter: de. Luister nog eens: je hoort maar één klank." } },
+        { t: "lrep", label: "nazeggen: bien que", q: "Luister en zeg de zin hardop na", full: "Bien qu'il soit fatigué, il continue à travailler.", nl: "Hoewel hij moe is, blijft hij werken.", tip: "Bien qu'il: que + il wordt qu'il, je hoort het als één woord." },
+        { t: "lmc", label: "luisteren: futur simple", q: "Luister en kies de juiste vertaling", tense: "futur simple", full: "Nous partirons demain matin.", nl: "We zullen morgenochtend vertrekken.", o: ["We zullen morgenochtend vertrekken.", "We zijn vanochtend vertrokken.", "We vertrekken morgenavond."], a: 0, tip: "Partirons: de uitgang -rons wijst op de futur simple." },
+        { t: "ldict", label: "dictee: iront", q: "Luister en vul het werkwoord in", tense: "futur simple", s: "Ils ___ à Paris demain.", full: "Ils iront à Paris demain.", nl: "Ze gaan morgen naar Parijs.", accept: ["iront"], show: "iront", tip: "Aller in de futur simple: ir- + -ont." },
+        { t: "lmc", label: "luisteren: passé composé met être", q: "Luister en kies de juiste vertaling", tense: "passé composé", full: "Elle est venue hier soir.", nl: "Ze is gisteravond gekomen.", o: ["Ze is gisteravond gekomen.", "Ze komt morgenavond.", "Ze was gisteravond moe."], a: 0, tip: "Est venue = is gekomen (passé composé met être)." },
+        { t: "lrep", label: "nazeggen: lui", q: "Luister en zeg de zin hardop na", full: "Je lui téléphone tous les soirs.", nl: "Ik bel hem (of haar) elke avond.", tip: "Tous les soirs: de s van tous hoor je hier niet." }
+      ]},
+      { key: "rappel", color: "#A9C7B8", name: "Woordenschat · Rappel lijst 10–11", sub: "18 oefeningen · vertalingen en zinnen niet uit het boek", ex: [
+        { t: "mc", label: "afin de (om te) · lijst 10", q: "Wat betekent «afin de» hier?", s: "Je travaille dur afin de réussir mon examen.", full: "Je travaille dur afin de réussir mon examen.", nl: "Ik werk hard om te slagen voor mijn examen.", o: ["om te", "ondanks", "in plaats van"], a: 0, tip: "Afin de + infinitief = om te. Afin que + zin = opdat." },
+        { t: "mc", label: "à cause de (door, wegens) · lijst 10", q: "Welk woord past?", s: "Il est resté à la maison ___ sa maladie.", full: "Il est resté à la maison à cause de sa maladie.", nl: "Hij is thuisgebleven door zijn ziekte.", o: ["à cause de", "grâce à", "afin de"], a: 0, tip: "À cause de = door, wegens (meestal iets negatiefs). Grâce à = dankzij (iets positiefs).", why: { 1: "Grâce à = dankzij: voor iets positiefs. Een ziekte is negatief → à cause de.", 2: "Afin de = om te: een doel, geen oorzaak." } },
+        { t: "type", label: "avant de (voor, voordat) · lijst 10", q: "Vul aan", nl: "Ik poets mijn tanden voor ik ga slapen.", s: "Je me brosse les dents ___ me coucher.", full: "Je me brosse les dents avant de me coucher.", accept: ["avant de"], show: "avant de", tip: "Avant de + infinitief. Avant que + zin met onderwerp en werkwoord.", why: { "avant que": "Avant que gebruik je voor een hele zin (met onderwerp en werkwoord). Hier volgt een infinitief → avant de.", "après": "Après = na. Hier: vóór." } },
+        { t: "mc", label: "bien que (hoewel) · lijst 10", q: "Wat betekent «bien que» hier?", s: "Bien qu'il soit fatigué, il continue à travailler.", full: "Bien qu'il soit fatigué, il continue à travailler.", nl: "Hoewel hij moe is, blijft hij werken.", o: ["hoewel", "omdat", "zodat"], a: 0, tip: "Bien que = hoewel. Daarna volgt de subjonctif: bien qu'il soit." },
+        { t: "mc", label: "depuis (sinds, al) · lijst 10", q: "Welk woord past?", s: "J'habite ici ___ trois ans.", full: "J'habite ici depuis trois ans.", nl: "Ik woon hier al drie jaar.", o: ["depuis", "pendant", "il y a"], a: 0, tip: "Depuis = sinds, al: iets dat nu nog altijd duurt.", why: { 1: "Pendant = gedurende: iets dat afgelopen is. Je woont er nog → depuis.", 2: "Il y a = geleden: J'ai déménagé il y a trois ans (ik ben drie jaar geleden verhuisd)." } },
+        { t: "mc", label: "au cas où (voor het geval dat) · lijst 10", q: "Wat betekent «au cas où» hier?", s: "Prends ton parapluie au cas où il pleuvrait.", full: "Prends ton parapluie au cas où il pleuvrait.", nl: "Neem je paraplu mee voor het geval het zou regenen.", o: ["voor het geval dat", "omdat", "hoewel"], a: 0, tip: "Au cas où = voor het geval dat. Daarna volgt de conditionnel: il pleuvrait." },
+        { t: "type", label: "au-dessus de (boven) · lijst 10", q: "Vul aan", nl: "Het vliegtuig vliegt boven de stad.", s: "L'avion vole ___ la ville.", full: "L'avion vole au-dessus de la ville.", accept: ["au-dessus de"], show: "au-dessus de", tip: "Au-dessus de = boven. Au-dessous de = onder.", why: { "au-dessous de": "Au-dessous de = onder. Boven = au-dessus de.", "sur": "Sur = op (met contact). Boven iets zonder contact: au-dessus de." } },
+        { t: "mc", label: "grâce à (dankzij) · lijst 11", q: "Welk woord past?", s: "Elle a réussi ___ son travail.", full: "Elle a réussi grâce à son travail.", nl: "Ze is geslaagd dankzij haar werk.", o: ["grâce à", "à cause de", "malgré"], a: 0, tip: "Grâce à = dankzij: een positieve oorzaak.", why: { 1: "À cause de = door, wegens: meestal iets negatiefs.", 2: "Malgré = ondanks. Haar werk hielp net." } },
+        { t: "mc", label: "malgré (ondanks) · lijst 11", q: "Wat betekent «malgré» hier?", s: "Il est sorti malgré la pluie.", full: "Il est sorti malgré la pluie.", nl: "Hij is buitengegaan ondanks de regen.", o: ["ondanks", "door", "tijdens"], a: 0, tip: "Malgré + zelfstandig naamwoord = ondanks." },
+        { t: "mc", label: "en train de (bezig met) · lijst 11", q: "Wat betekent «en train de» hier?", s: "Je suis en train de faire mes devoirs.", full: "Je suis en train de faire mes devoirs.", nl: "Ik ben mijn huiswerk aan het maken.", o: ["bezig met", "van plan om", "net klaar met"], a: 0, tip: "Être en train de + infinitief = bezig zijn met, aan het … zijn." },
+        { t: "type", label: "jusqu'à ce que (totdat) · lijst 11", q: "Vul aan", nl: "Ik wacht tot je terugkomt.", s: "J'attends ___ tu reviennes.", full: "J'attends jusqu'à ce que tu reviennes.", accept: ["jusqu'à ce que"], show: "jusqu'à ce que", tip: "Jusqu'à ce que = totdat. Daarna volgt de subjonctif: tu reviennes.", why: { "jusqu'à": "Jusqu'à gebruik je voor een tijdstip of plaats (jusqu'à demain). Voor een hele zin: jusqu'à ce que." } },
+        { t: "mc", label: "selon (volgens) · lijst 11", q: "Welk woord past?", s: "___ la météo, il va neiger demain.", full: "Selon la météo, il va neiger demain.", nl: "Volgens het weerbericht gaat het morgen sneeuwen.", o: ["Selon", "Malgré", "Vers"], a: 0, tip: "Selon = volgens. D'après (lijst 10) betekent hetzelfde.", why: { 1: "Malgré = ondanks.", 2: "Vers = naar, rond (vers midi: rond de middag)." } },
+        { t: "mc", label: "lorsque (toen, wanneer) · lijst 11", q: "Wat betekent «lorsque» hier?", s: "Lorsque j'étais petite, j'avais peur du noir.", full: "Lorsque j'étais petite, j'avais peur du noir.", nl: "Toen ik klein was, was ik bang in het donker.", o: ["toen", "hoewel", "tenzij"], a: 0, tip: "Lorsque = toen, wanneer. Iets formeler dan quand." },
+        { t: "mc", label: "pour que (opdat, zodat) · lijst 11", q: "Welk woord past?", s: "Je parle lentement ___ tu me comprennes.", full: "Je parle lentement pour que tu me comprennes.", nl: "Ik praat traag zodat je me begrijpt.", o: ["pour que", "parce que", "tandis que"], a: 0, tip: "Pour que = opdat, zodat: een doel. Daarna volgt de subjonctif: tu comprennes.", why: { 1: "Parce que = omdat: een reden. Hier is het een doel → pour que.", 2: "Tandis que = terwijl." } },
+        { t: "type", label: "au lieu de (in plaats van) · lijst 11", q: "Vul aan", nl: "In plaats van te werken, kijkt hij tv.", s: "___ travailler, il regarde la télé.", full: "Au lieu de travailler, il regarde la télé.", accept: ["au lieu de"], show: "au lieu de", tip: "Au lieu de + infinitief = in plaats van." },
+        { t: "mc", label: "à partir de (vanaf) · lijst 11", q: "Welk woord past?", s: "Le magasin sera fermé ___ lundi prochain.", full: "Le magasin sera fermé à partir de lundi prochain.", nl: "De winkel is gesloten vanaf volgende maandag.", o: ["à partir de", "depuis", "pendant"], a: 0, tip: "À partir de = vanaf: een beginpunt, vaak in de toekomst.", why: { 1: "Depuis = sinds: iets dat al bezig is. Hier gaat het om de toekomst.", 2: "Pendant = gedurende." } },
+        { t: "mc", fr2nl: true, label: "malgré in een zin · lijst 11", q: "Wat betekent deze zin?", s: "Malgré le froid, nous sommes allés à la plage.", full: "Malgré le froid, nous sommes allés à la plage.", nl: "Ondanks de kou zijn we naar het strand gegaan.", o: ["Ondanks de kou zijn we naar het strand gegaan.", "Door de kou zijn we naar het strand gegaan.", "Dankzij de kou zijn we naar het strand gegaan."], a: 0, tip: "Malgré = ondanks." },
+        { t: "mc", fr2nl: true, label: "pour que in een zin · lijst 11", q: "Wat betekent deze zin?", s: "Elle travaille dur pour que ses enfants puissent étudier.", full: "Elle travaille dur pour que ses enfants puissent étudier.", nl: "Ze werkt hard zodat haar kinderen kunnen studeren.", o: ["Ze werkt hard zodat haar kinderen kunnen studeren.", "Ze werkt hard omdat haar kinderen studeren.", "Ze werkt hard hoewel haar kinderen studeren."], a: 0, tip: "Pour que = opdat, zodat: een doel." }
+      ]}
+    ];
+  }
+
+}
+
+var D = new Data();
+var CARDS = D.cards(), TOPICS = D.topics(), EX = [], COLOR = {};
+TOPICS.forEach(function(tp){ COLOR[tp.key]=tp.color; tp.ex.forEach(function(e){ e.topic = tp.name; e.key = tp.key; EX.push(e); }); });
+var SPK = '<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7D848F" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19 6a8.5 8.5 0 0 1 0 12"/></svg>';
+var PLAY = '<svg aria-hidden="true" width="30" height="30" viewBox="0 0 24 24" fill="#D9906F"><path d="M8 5l12 7-12 7z"/></svg>';
+var frVoice = null;
+function pickVoice(){ try{ var vs = window.speechSynthesis.getVoices(); var fr = vs.filter(function(v){ return /^fr/i.test(v.lang); }); frVoice = fr.filter(function(v){ return /fr[-_]FR/i.test(v.lang); })[0] || fr[0] || null; }catch(e){} }
+try{ if(window.speechSynthesis){ pickVoice(); window.speechSynthesis.onvoiceschanged = pickVoice; } }catch(e){}
+function ttsStatus(msg){ S.ttsMsg = msg; var el=document.getElementById("ttsmsg"); if(el) el.textContent = msg; }
+function speak(t, test){
+  try{
+    var ss = window.speechSynthesis;
+    if(!ss || typeof SpeechSynthesisUtterance === "undefined"){ ttsStatus("Voorlezen wordt niet ondersteund in deze app of browser."); if(!S.noTTS) set({noTTS:true}); return; }
+    if(ss.speaking || ss.pending) ss.cancel();
+    if(ss.paused) ss.resume();
+    var u = new SpeechSynthesisUtterance(t);
+    u.lang = "fr-FR"; u.rate = S.slow ? 0.65 : 0.9; u.volume = 1;
+    if(!frVoice) pickVoice(); if(frVoice) u.voice = frVoice;
+    var started = false;
+    u.onstart = function(){ started = true; if(test) ttsStatus("Het werkt. Stem: " + (frVoice ? frVoice.name : "standaard") + "."); };
+    u.onerror = function(e){ ttsStatus("Voorlezen lukt niet (" + (e && e.error ? e.error : "onbekende fout") + ")."); };
+    ss.speak(u);
+    setTimeout(function(){ if(!started && test){ var n=0; try{ n=ss.getVoices().length; }catch(e){} ttsStatus(n ? "Er kwam geen geluid. Staat je telefoon op stil, of het volume laag?" : "Geen voorleesstemmen gevonden in deze app of browser."); } }, 2500);
+  }catch(e){ ttsStatus("Voorlezen lukt niet (" + e.message + ")."); if(!S.noTTS) set({noTTS:true}); }
+}
+function isListen(e){ return e && (e.t==="lmc"||e.t==="ldict"||e.t==="lrep"); }
+function autoSay(){ var e = S.phase==="ex" ? cur() : null; if(isListen(e)) speak(e.full); }
+function spk(text){ return '<button class="spk" aria-label="Lees voor" data-a="say" data-v="'+esc(text)+'">'+SPK+'</button>'; }
+function chipText(c){ return c==="#1F2D44" ? "#FFF9EE" : "#1F2D44"; }
+
+function fresh(keep){ return { phase:"start", slow:false, revealed:false, noTTS:false, chosen: keep ? keep.chosen : {voeg:true,ww:true,vnw:true,lw:true,rappel:true,luister:true}, size: keep ? keep.size : 10, introIdx:0, queue:[], perm:{}, pos:0, answered:false, correct:false, ok2:false, picked:-1, typed:"", typedFinal:"", built:[], wrong:[], score:0, round:1 }; }
+var S = fresh();
+function norm(x){ return String(x||"").trim().toLowerCase().replace(/[’`]/g,"'").replace(/\s+/g," "); }
+function esc(x){ return String(x).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function shuffle(n){ var a=[]; for(var i=0;i<n;i++) a.push(i); for(var j=n-1;j>0;j--){ var k=Math.floor(Math.random()*(j+1)); var t=a[j]; a[j]=a[k]; a[k]=t; } return a; }
+function perms(q){ var p={}; q.forEach(function(id){ var e=EX[id]; if(e.t==="mc"||e.t==="lmc") p[id]=shuffle(e.o.length); if(e.t==="build") p[id]=shuffle(e.tiles.length); }); return p; }
+function buildQueue(chosen,size){ var lists={},order=[]; EX.forEach(function(e,i){ if(!chosen[e.key])return; if(!lists[e.key]){lists[e.key]=[];order.push(e.key);} lists[e.key].push(i); }); var q=[],more=true; while(more){more=false; order.forEach(function(k){ if(lists[k].length){q.push(lists[k].shift());more=true;} });} return size>0?q.slice(0,size):q; }
+function set(u){ for(var k in u) S[k]=u[k]; render(); }
+function cur(){ return EX[S.queue[S.pos]]; }
+function finish(correct, extra){ var id=S.queue[S.pos], w=S.wrong.slice(); if(!correct && w.indexOf(id)<0) w.push(id); var u={answered:true,correct:correct,score:S.score+(correct?1:0),wrong:w}; if(extra) for(var k in extra) u[k]=extra[k]; set(u); }
+function startLesson(){ var q=buildQueue(S.chosen,S.size); if(!q.length) return; set({phase:"ex",queue:q,perm:perms(q),pos:0,wrong:[],score:0,round:1,answered:false,correct:false,ok2:false,picked:-1,typed:"",typedFinal:"",built:[]}); window.scrollTo(0,0); }
+
+var A = {
+  toggle: function(k){ var c={}; for(var x in S.chosen) c[x]=S.chosen[x]; c[k]=!c[k]; set({chosen:c}); },
+  size: function(v){ set({size:+v}); },
+  start: function(){ startLesson(); autoSay(); },
+  say: function(t){ speak(t); },
+  test: function(){ ttsStatus("Even testen…"); speak("Bonjour ! Le son fonctionne.", true); },
+  slow: function(){ set({slow:!S.slow}); },
+  reveal: function(){ set({revealed:true}); },
+  self: function(v){ finish(v==="1"); },
+  intro: function(){ if(buildQueue(S.chosen,0).length) set({phase:"intro",introIdx:0}); },
+  introNext: function(){ if(S.introIdx<CARDS.length-1) set({introIdx:S.introIdx+1}); else { startLesson(); autoSay(); } },
+  pick: function(i){ if(S.answered) return; i=+i; finish(i===cur().a,{picked:i}); var e=cur(); if(e.t==="lmc"||e.fr2nl) speak(e.full); },
+  add: function(k){ if(S.answered) return; set({built:S.built.concat([+k])}); },
+  remove: function(j){ if(S.answered) return; var b=S.built.slice(); b.splice(+j,1); set({built:b}); },
+  check: function(){ var ex=cur(); if(ex.t==="build"){ var made=S.built.map(function(k){return ex.tiles[k];}).join(" "); finish(norm(made)===norm(ex.ans)); } else { var g=norm(S.typed); var ok=ex.accept.map(norm).indexOf(g)>=0; var alt=!ok && !!(ex.ok2&&ex.ok2[g]); finish(ok||alt,{ok2:alt,typedFinal:g}); } },
+  next: function(){ var r={answered:false,correct:false,ok2:false,picked:-1,typed:"",typedFinal:"",built:[],revealed:false}; if(S.pos+1>=S.queue.length) r.phase="end"; else r.pos=S.pos+1; set(r); window.scrollTo(0,0); autoSay(); },
+  retry: function(){ var q=S.wrong.slice(); set({phase:"ex",queue:q,perm:perms(q),wrong:[],pos:0,score:0,round:S.round+1,answered:false,correct:false,ok2:false,picked:-1,typed:"",typedFinal:"",built:[],revealed:false}); window.scrollTo(0,0); autoSay(); },
+  restart: function(){ S=fresh(S); render(); window.scrollTo(0,0); }
+};
+
+function head(chip,color,right,p){
+  var c = chip ? '<span class="chip"><span class="dot" style="background:'+color+'"></span>'+esc(chip)+'</span>' : '<span></span>';
+  return '<div class="head">'+c+'<span>'+esc(right)+'</span></div><div class="bar"><div style="width:'+Math.round(p)+'%;background:'+color+'"></div></div>';
+}
+var FLOWER = '<svg aria-hidden="true" width="92" height="120" viewBox="0 0 92 120" style="align-self:flex-end"><path d="M46 52 L46 118" stroke="#1F2D44" stroke-width="4"/><path d="M46 92 C30 84 26 72 28 66 C38 70 46 80 46 92Z" fill="#1F2D44"/><path d="M46 104 C62 96 66 84 64 78 C54 82 46 92 46 104Z" fill="#E07AB6"/><g fill="#E8492B"><circle cx="46" cy="18" r="11"/><circle cx="68" cy="27" r="11"/><circle cx="77" cy="49" r="11"/><circle cx="68" cy="71" r="11"/><circle cx="24" cy="71" r="11"/><circle cx="15" cy="49" r="11"/><circle cx="24" cy="27" r="11"/></g><circle cx="46" cy="49" r="17" fill="#EBB02F"/><circle cx="46" cy="49" r="8" fill="#FFF9EE"/></svg>';
+
+function render(){
+  var h="";
+  if(S.phase==="start"){
+    var avail=buildQueue(S.chosen,0).length, planned=S.size>0?Math.min(S.size,avail):avail, min=Math.max(1,Math.round(planned*0.5));
+    h+=head("","#EDB49B","",0)+'<div class="grow"><h1>Wat wil je oefenen?</h1><div class="list">';
+    TOPICS.forEach(function(tp){ h+='<label class="row" for="t-'+tp.key+'"><span class="dot" style="background:'+tp.color+'"></span><span class="txt"><span>'+esc(tp.name)+'</span><span class="small muted">'+tp.ex.length+' oefeningen</span></span><input class="sr" type="checkbox" id="t-'+tp.key+'" data-a="toggle" data-v="'+tp.key+'"'+(S.chosen[tp.key]?' checked':'')+'><span class="sw" aria-hidden="true"></span></label>'; });
+    h+='</div><div style="display:flex;flex-direction:column;gap:8px"><span class="small muted">Aantal oefeningen</span><div class="pills">';
+    [[10,"10"],[15,"15"],[0,"Alles"]].forEach(function(z){ h+='<button class="pill'+(S.size===z[0]?' on':'')+'" data-a="size" data-v="'+z[0]+'">'+z[1]+'</button>'; });
+    h+='</div><span class="small muted">'+(avail?planned+' oefeningen, gemengd · ongeveer '+min+' min (schatting)':'Kies minstens één onderwerp.')+'</span></div>';
+    h+='<div style="display:flex;align-items:center;gap:12px"><button class="spk" aria-label="Test het geluid" data-a="test">'+SPK+'</button><span class="s15 muted" id="ttsmsg">'+esc(S.ttsMsg||"Test het geluid")+'</span></div>';
+    h+='<div class="bottom"><button class="btn" data-a="start"'+(avail?'':' disabled')+'>Start</button>'+(S.chosen.voeg?'<button class="link" data-a="intro">Eerst de voegwoorden bekijken (7 kaartjes)</button>':'')+'</div></div>';
+  } else if(S.phase==="intro"){
+    var c=CARDS[S.introIdx];
+    h+=head("Voegwoorden",COLOR.voeg,(S.introIdx+1)+" / "+CARDS.length,(S.introIdx+1)/CARDS.length*100);
+    h+='<div class="grow"><p class="s15 muted" style="margin:6px 0 0">Lees het woord, de zin en de vertaling.</p><div class="card"><div class="saywrap"><div style="font-size:32px;font-weight:700;line-height:1.1;flex-grow:1">'+esc(c.fr)+'</div>'+spk(c.fr)+'</div><div style="font-size:18px">'+esc(c.nl)+'</div><div class="sep saywrap"><div style="font-size:19px;flex-grow:1">'+esc(c.ex)+'</div>'+spk(c.ex)+'</div><div class="s15 muted">'+esc(c.exNl)+'</div></div>';
+    h+='<div class="bottom"><button class="btn" data-a="introNext">'+(S.introIdx<CARDS.length-1?'Volgende →':'Start de oefeningen →')+'</button></div></div>';
+  } else if(S.phase==="ex"){
+    var ex=cur(), id=S.queue[S.pos], total=S.queue.length, col=COLOR[ex.key];
+    h+=head(ex.topic+(S.round>1?" · fouten":""),col,(S.pos+1)+" / "+total,(S.pos+(S.answered?1:0))/total*100);
+    h+='<div class="grow"><div class="small muted" style="margin-top:4px">'+esc(ex.q)+'</div>';
+    var showNl = !ex.fr2nl && !isListen(ex) && (ex.t!=="mc" || ex.key==="ww");
+    if(showNl) h+='<div style="font-size:18px">'+esc(ex.nl)+'</div>';
+    if(isListen(ex)){
+      h+='<div class="lrow"><button class="play" aria-label="Speel de zin af" data-a="say" data-v="'+esc(ex.full)+'">'+PLAY+'</button><button class="pill'+(S.slow?' on':'')+'" style="flex:none;padding:0 16px" data-a="slow">Trager</button></div>';
+      h+='<div class="s15 muted" id="ttsmsg">'+esc(S.ttsMsg||"")+'</div>';
+    }
+    if(ex.s){
+      var hideSpk = ex.s.indexOf("___")>=0 || isListen(ex);
+      h+='<div class="saywrap"><div class="sent" style="flex-grow:1">'+esc(ex.s)+'</div>'+(hideSpk?'':spk(ex.s))+'</div>';
+    }
+    var order = S.perm[id];
+    if(ex.t==="mc"||ex.t==="lmc"){ h+='<div class="opts">'; order.forEach(function(i){ var o=ex.o[i]; var cl="opt"; if(S.answered&&i===ex.a) cl+=" right"; else if(S.answered&&i===S.picked) cl+=" wrong"; h+='<button class="'+cl+'" data-a="pick" data-v="'+i+'">'+esc(o)+'</button>'; }); h+='</div>'; }
+    if(ex.t==="build"){ h+='<div class="dropzone">'; if(!S.built.length) h+='<span class="s15 muted" style="padding-left:6px">Tik de stukjes in de juiste volgorde.</span>'; S.built.forEach(function(k,j){ h+='<button class="tile in" data-a="remove" data-v="'+j+'">'+esc(ex.tiles[k])+'</button>'; }); h+='</div><div class="tiles">'; order.forEach(function(k){ if(S.built.indexOf(k)<0) h+='<button class="tile" data-a="add" data-v="'+k+'">'+esc(ex.tiles[k])+'</button>'; }); h+='</div>'; }
+    if(ex.t==="lrep" && !S.answered){
+      if(!S.revealed) h+='<button class="btn2" data-a="reveal">Toon de zin</button>';
+      else h+='<div class="card"><div class="sent">'+esc(ex.full)+'</div><div class="s15 muted">'+esc(ex.nl)+'</div><div class="s15 muted">'+esc(ex.tip)+'</div></div><div class="small muted">Kon je de zin vlot nazeggen?</div><div class="pills"><button class="pill" data-a="self" data-v="1">Gelukt</button><button class="pill" data-a="self" data-v="0">Nog niet</button></div>';
+    }
+    if(ex.t==="type"||ex.t==="ldict"){ h+='<div style="display:flex;flex-direction:column;gap:6px"><label for="ans" class="small muted">Jouw antwoord</label><input id="ans" class="inp" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" value="'+esc(S.typed)+'"'+(S.answered?' readonly':'')+'></div>'; }
+    if(S.answered){
+      var why=""; if(ex.why){ if(ex.t==="mc"&&S.picked!==ex.a&&ex.why[S.picked]) why=ex.why[S.picked]; if(ex.t==="type"&&!S.correct&&ex.why[S.typedFinal]) why=ex.why[S.typedFinal]; } if(S.ok2&&ex.ok2&&ex.ok2[S.typedFinal]) why=ex.ok2[S.typedFinal];
+      var corr=(ex.t==="mc"||ex.t==="lmc")?ex.o[ex.a]:(ex.t==="build"?ex.full:(ex.show||""));
+      var vtxt=S.correct?(S.ok2?"Ook juist":"Juist"):"Niet juist"; if(ex.t==="lrep") vtxt=S.correct?"Gelukt":"Komt terug"; if(ex.tense) vtxt+=" · het is "+ex.tense;
+      h+='<div class="card"><span class="verdict '+(S.correct?'v-ok':'v-no')+'">'+esc(vtxt)+'</span>';
+      if((!S.correct||S.ok2)&&ex.t!=="lrep") h+='<div>Juist is: <b>'+esc(corr)+'</b></div>';
+      if(why) h+='<div class="s15">'+esc(why)+'</div>';
+      h+='<div class="s15 muted">'+esc(ex.tip)+'</div><div class="sep saywrap"><div style="flex-grow:1"><div>'+esc(ex.full)+'</div><div class="s15 muted">'+esc(ex.nl)+'</div></div>'+spk(ex.full)+'</div></div>';
+    }
+    h+='<div class="bottom">';
+    if(!S.answered&&ex.t==="build") h+='<button class="btn" data-a="check"'+(S.built.length?'':' disabled')+'>Controleer</button>';
+    if(!S.answered&&(ex.t==="type"||ex.t==="ldict")) h+='<button class="btn" id="checkbtn" data-a="check"'+(norm(S.typed)?'':' disabled')+'>Controleer</button>';
+    if(S.answered) h+='<button class="btn" data-a="next">Volgende →</button>';
+    h+='</div></div>';
+  } else {
+    var tot=S.queue.length, r=tot?S.score/tot:0;
+    var ch=r===1?["Chapeau !","Petje af!"]:(r>=0.7?["Bien joué !","Goed gedaan!"]:["Petit à petit, l'oiseau fait son nid.","Stap voor stap kom je er wel. Letterlijk: beetje bij beetje bouwt de vogel zijn nest."]);
+    var pc=Math.round(r*100); h+=head("Klaar","#EDB49B","",100)+'<div class="grow"><div class="ring" style="background:conic-gradient(#EDB49B '+(pc*3.6)+'deg, #E4E8ED 0deg)"><div>'+pc+'%</div></div><div style="text-align:center"><div class="cheer">'+esc(ch[0])+'</div><div class="s15 muted" style="margin-top:4px">'+esc(ch[1])+'</div></div><div style="font-size:18px;text-align:center" class="muted">'+S.score+' van de '+tot+' juist'+(S.round>1?' (fouten opnieuw)':'')+'</div>';
+    if(S.wrong.length){ h+='<div class="card" style="gap:2px"><div class="small muted">Fouten · komen morgen terug</div>'; S.wrong.forEach(function(id){ h+='<div style="padding:8px 0;border-bottom:1px solid #E1E5EA;display:flex;gap:10px;align-items:center"><span class="dot" style="background:'+COLOR[EX[id].key]+'"></span><span>'+esc(EX[id].label)+'</span></div>'; }); h+='</div>'; }
+    else h+='<p style="margin:0">Alles juist. Morgen komen er een paar terug als herhaling.</p>';
+    h+='<div class="bottom">'+(S.wrong.length?'<button class="btn" data-a="retry">Fouten nu nog eens</button>':'')+'<button class="btn2" data-a="restart">Nieuwe les</button></div></div>';
+  }
+  document.getElementById("app").innerHTML=h;
+}
+
+var app=document.getElementById("app");
+app.addEventListener("click",function(e){ var t=e.target.closest("[data-a]"); if(!t||t.disabled||t.type==="checkbox") return; A[t.getAttribute("data-a")](t.getAttribute("data-v")); });
+app.addEventListener("change",function(e){ var t=e.target; if(t.type==="checkbox"&&t.getAttribute("data-a")==="toggle") A.toggle(t.getAttribute("data-v")); });
+app.addEventListener("input",function(e){ if(e.target.id==="ans"){ S.typed=e.target.value; var b=document.getElementById("checkbtn"); if(b) b.disabled=!norm(S.typed); } });
+app.addEventListener("keydown",function(e){ if(e.target.id==="ans"&&e.key==="Enter"&&!S.answered&&norm(S.typed)) A.check(); });
+render();
+</script>
+</body>
+</html>
