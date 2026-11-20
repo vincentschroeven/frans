@@ -188,21 +188,38 @@ function speak(t, test){
 function isListen(e){ return e && (e.t==="lmc"||e.t==="ldict"||e.t==="lrep"); }
 function autoSay(){ var e = S.phase==="ex" ? cur() : null; if(isListen(e)) speak(e.full); }
 function spk(text){ return '<button class="spk" aria-label="Lees voor" data-a="say" data-v="'+esc(text)+'">'+SPK+'</button>'; }
+var STORE_KEY = "frans-herhaling-v1";
+function pad(n){ return (n<10?"0":"")+n; }
+function dayStr(offset){ var d=new Date(); d.setDate(d.getDate()+(offset||0)); return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); }
+function itemKey(e){ return e.key+"|"+(e.full||e.s||e.label); }
+var KEYIDX = {}; EX.forEach(function(e,i){ KEYIDX[itemKey(e)] = i; });
+function storeGet(){ try{ return JSON.parse(localStorage.getItem(STORE_KEY) || "{}") || {}; }catch(e){ return {}; } }
+function storeSet(o){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(o)); }catch(e){} }
+var GAPS = [1, 2, 4, 7, 14];
+function record(id, correct){
+  var st = storeGet(), k = itemKey(EX[id]), rec = st[k], t = dayStr(0);
+  if(!correct){ st[k] = { box: 0, due: dayStr(1) }; }
+  else if(rec && rec.due <= t){ var b = rec.box + 1; if(b >= GAPS.length) delete st[k]; else st[k] = { box: b, due: dayStr(GAPS[b]) }; }
+  storeSet(st);
+}
+function dueIds(){ var st = storeGet(), t = dayStr(0); return Object.keys(st).filter(function(k){ return st[k].due <= t && KEYIDX[k] !== undefined; }).map(function(k){ return KEYIDX[k]; }); }
+function tomorrowCount(){ var st = storeGet(), t1 = dayStr(1); return Object.keys(st).filter(function(k){ return st[k].due <= t1 && KEYIDX[k] !== undefined; }).length; }
 function chipText(c){ return c==="#1F2D44" ? "#FFF9EE" : "#1F2D44"; }
 
-function fresh(keep){ return { phase:"start", slow:false, revealed:false, noTTS:false, chosen: keep ? keep.chosen : {voeg:true,ww:true,vnw:true,lw:true,rappel:true,luister:true}, size: keep ? keep.size : 10, introIdx:0, queue:[], perm:{}, pos:0, answered:false, correct:false, ok2:false, picked:-1, typed:"", typedFinal:"", built:[], wrong:[], score:0, round:1 }; }
+function fresh(keep){ return { phase:"start", slow:false, revealed:false, noTTS:false, review:true, reviewSet:[], chosen: keep ? keep.chosen : {voeg:true,ww:true,vnw:true,lw:true,rappel:true,luister:true}, size: keep ? keep.size : 10, introIdx:0, queue:[], perm:{}, pos:0, answered:false, correct:false, ok2:false, picked:-1, typed:"", typedFinal:"", built:[], wrong:[], score:0, round:1 }; }
 var S = fresh();
 function norm(x){ return String(x||"").trim().toLowerCase().replace(/[’`]/g,"'").replace(/\s+/g," "); }
 function esc(x){ return String(x).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
 function shuffle(n){ var a=[]; for(var i=0;i<n;i++) a.push(i); for(var j=n-1;j>0;j--){ var k=Math.floor(Math.random()*(j+1)); var t=a[j]; a[j]=a[k]; a[k]=t; } return a; }
 function perms(q){ var p={}; q.forEach(function(id){ var e=EX[id]; if(e.t==="mc"||e.t==="lmc") p[id]=shuffle(e.o.length); if(e.t==="build") p[id]=shuffle(e.tiles.length); }); return p; }
-function buildQueue(chosen,size){ var lists={},order=[]; EX.forEach(function(e,i){ if(!chosen[e.key])return; if(!lists[e.key]){lists[e.key]=[];order.push(e.key);} lists[e.key].push(i); }); var q=[],more=true; while(more){more=false; order.forEach(function(k){ if(lists[k].length){q.push(lists[k].shift());more=true;} });} return size>0?q.slice(0,size):q; }
+function buildQueue(chosen,size){ var lists={},order=[]; EX.forEach(function(e,i){ if(!chosen[e.key])return; if(!lists[e.key]){lists[e.key]=[];order.push(e.key);} lists[e.key].push(i); }); order.forEach(function(k){ var L=lists[k], p=shuffle(L.length); lists[k]=p.map(function(j){ return L[j]; }); }); var q=[],more=true; while(more){more=false; order.forEach(function(k){ if(lists[k].length){q.push(lists[k].shift());more=true;} });} return size>0?q.slice(0,size):q; }
 function set(u){ for(var k in u) S[k]=u[k]; render(); }
 function cur(){ return EX[S.queue[S.pos]]; }
-function finish(correct, extra){ var id=S.queue[S.pos], w=S.wrong.slice(); if(!correct && w.indexOf(id)<0) w.push(id); var u={answered:true,correct:correct,score:S.score+(correct?1:0),wrong:w}; if(extra) for(var k in extra) u[k]=extra[k]; set(u); }
-function startLesson(){ var q=buildQueue(S.chosen,S.size); if(!q.length) return; set({phase:"ex",queue:q,perm:perms(q),pos:0,wrong:[],score:0,round:1,answered:false,correct:false,ok2:false,picked:-1,typed:"",typedFinal:"",built:[]}); window.scrollTo(0,0); }
+function finish(correct, extra){ var id=S.queue[S.pos], w=S.wrong.slice(); record(id, correct); if(!correct && w.indexOf(id)<0) w.push(id); var u={answered:true,correct:correct,score:S.score+(correct?1:0),wrong:w}; if(extra) for(var k in extra) u[k]=extra[k]; set(u); }
+function startLesson(){ var q=buildQueue(S.chosen,S.size); var due = S.review ? dueIds() : []; q = due.concat(q.filter(function(i){ return due.indexOf(i)<0; })); if(!q.length) return; set({phase:"ex",queue:q,reviewSet:due,perm:perms(q),pos:0,wrong:[],score:0,round:1,answered:false,correct:false,ok2:false,picked:-1,typed:"",typedFinal:"",built:[]}); window.scrollTo(0,0); }
 
 var A = {
+  toggleReview: function(){ set({review:!S.review}); },
   toggle: function(k){ var c={}; for(var x in S.chosen) c[x]=S.chosen[x]; c[k]=!c[k]; set({chosen:c}); },
   size: function(v){ set({size:+v}); },
   start: function(){ startLesson(); autoSay(); },
@@ -231,15 +248,15 @@ var FLOWER = '<svg aria-hidden="true" width="92" height="120" viewBox="0 0 92 12
 function render(){
   var h="";
   if(S.phase==="start"){
-    var avail=buildQueue(S.chosen,0).length, planned=S.size>0?Math.min(S.size,avail):avail, min=Math.max(1,Math.round(planned*0.5));
+    var due=dueIds(), nd=S.review?due.length:0, avail=buildQueue(S.chosen,0).length, base=S.size>0?Math.min(S.size,avail):avail, planned=nd+buildQueue(S.chosen,S.size).filter(function(i){ return !S.review || due.indexOf(i)<0; }).length, min=Math.max(1,Math.round(planned*0.5));
     var dn=["zondag","maandag","dinsdag","woensdag","donderdag","vrijdag","zaterdag"], mn=["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"], now=new Date();
-    h+='<div class="grow"><div><div class="small muted">'+dn[now.getDay()]+' '+now.getDate()+' '+mn[now.getMonth()]+'</div><div class="hello">Bonjour !</div></div><h1>Wat wil je oefenen?</h1><div class="list">';
+    h+='<div class="grow"><div><div class="small muted">'+dn[now.getDay()]+' '+now.getDate()+' '+mn[now.getMonth()]+'</div><div class="hello">Bonjour !</div></div>'+(due.length?'<div class="list"><label class="row" for="t-review"><span class="txt"><span>Herhalen van vorige keer</span><span class="small muted">'+due.length+(due.length===1?' oefening':' oefeningen')+' · komen eerst</span></span><input class="sr" type="checkbox" id="t-review" data-a="toggleReview"'+(S.review?' checked':'')+'><span class="sw" aria-hidden="true"></span></label></div>':'')+'<h1>Wat wil je oefenen?</h1><div class="list">';
     TOPICS.forEach(function(tp){ h+='<label class="row" for="t-'+tp.key+'"><span class="txt"><span>'+esc(tp.name)+'</span><span class="small muted">'+tp.ex.length+' oefeningen</span></span><input class="sr" type="checkbox" id="t-'+tp.key+'" data-a="toggle" data-v="'+tp.key+'"'+(S.chosen[tp.key]?' checked':'')+'><span class="sw" aria-hidden="true"></span></label>'; });
     h+='</div><div style="display:flex;flex-direction:column;gap:8px"><span class="small muted">Aantal oefeningen</span><div class="pills">';
     [[10,"10"],[15,"15"],[0,"Alles"]].forEach(function(z){ h+='<button class="pill'+(S.size===z[0]?' on':'')+'" data-a="size" data-v="'+z[0]+'">'+z[1]+'</button>'; });
-    h+='</div><span class="small muted">'+(avail?planned+' oefeningen, gemengd · ongeveer '+min+' min (schatting)':'Kies minstens één onderwerp.')+'</span></div>';
+    h+='</div><span class="small muted">'+(planned?planned+' oefeningen'+(nd?' (waarvan '+nd+' herhaling)':', gemengd')+' · ongeveer '+min+' min (schatting)':'Kies minstens één onderwerp.')+'</span></div>';
     h+='<div style="display:flex;align-items:center;gap:12px"><button class="spk" aria-label="Test het geluid" data-a="test">'+SPK+'</button><span class="s15 muted" id="ttsmsg">'+esc(S.ttsMsg||"Test het geluid")+'</span></div>';
-    h+='<div class="bottom"><button class="btn" data-a="start"'+(avail?'':' disabled')+'>Start</button>'+(S.chosen.voeg?'<button class="link" data-a="intro">Eerst de voegwoorden bekijken (7 kaartjes)</button>':'')+'</div></div>';
+    h+='<div class="bottom"><button class="btn" data-a="start"'+(planned?'':' disabled')+'>Start</button>'+(S.chosen.voeg?'<button class="link" data-a="intro">Eerst de voegwoorden bekijken (7 kaartjes)</button>':'')+'</div></div>';
   } else if(S.phase==="intro"){
     var c=CARDS[S.introIdx];
     h+=head("Voegwoorden",COLOR.voeg,(S.introIdx+1)+" / "+CARDS.length,(S.introIdx+1)/CARDS.length*100);
@@ -247,7 +264,7 @@ function render(){
     h+='<div class="bottom"><button class="btn" data-a="introNext">'+(S.introIdx<CARDS.length-1?'Volgende →':'Start de oefeningen →')+'</button></div></div>';
   } else if(S.phase==="ex"){
     var ex=cur(), id=S.queue[S.pos], total=S.queue.length, col=COLOR[ex.key];
-    h+=head(ex.topic+(S.round>1?" · fouten":""),col,(S.pos+1)+" / "+total,(S.pos+(S.answered?1:0))/total*100);
+    h+=head((S.reviewSet.indexOf(id)>=0?"Herhaling · ":"")+ex.topic+(S.round>1?" · fouten":""),col,(S.pos+1)+" / "+total,(S.pos+(S.answered?1:0))/total*100);
     h+='<div class="grow">';
     var showNl = !ex.fr2nl && !isListen(ex) && (ex.t!=="mc" || ex.key==="ww");
     if(showNl) h+='<div style="font-size:18px;margin-top:6px">'+esc(ex.nl)+'</div>';
@@ -291,7 +308,8 @@ function render(){
     var ch=r===1?["Chapeau !","Petje af!"]:(r>=0.7?["Bien joué !","Goed gedaan!"]:["Petit à petit, l'oiseau fait son nid.","Stap voor stap kom je er wel. Letterlijk: beetje bij beetje bouwt de vogel zijn nest."]);
     var pc=Math.round(r*100); h+='<div class="grow"><div class="ring" style="background:conic-gradient(#E3A587 '+(pc*3.6)+'deg, #ECE6DC 0deg)"><div>'+pc+'%</div></div><div style="text-align:center"><div class="cheer">'+esc(ch[0])+'</div><div class="s15 muted" style="margin-top:4px">'+esc(ch[1])+'</div></div><div style="font-size:18px;text-align:center" class="muted">'+S.score+' van de '+tot+' juist'+(S.round>1?' (fouten opnieuw)':'')+'</div>';
     if(S.wrong.length){ h+='<div class="card" style="gap:2px"><div class="small muted">Fouten · komen morgen terug</div>'; S.wrong.forEach(function(id){ h+='<div style="padding:8px 0;border-bottom:1px solid #ECE6DC;display:flex;gap:10px;align-items:center"><span>'+esc(EX[id].label)+'</span></div>'; }); h+='</div>'; }
-    else h+='<p style="margin:0">Alles juist. Morgen komen er een paar terug als herhaling.</p>';
+    else h+='<p style="margin:0;text-align:center">Alles juist.</p>';
+    var tc=tomorrowCount(); h+='<p class="s15 muted" style="margin:0;text-align:center">'+(tc?'Morgen '+(tc===1?'staat er 1 oefening':'staan er '+tc+' oefeningen')+' klaar om te herhalen.':'Morgen staat er niets te herhalen.')+'</p>';
     h+='<div class="bottom">'+(S.wrong.length?'<button class="btn" data-a="retry">Fouten nu nog eens</button>':'')+'<button class="btn2" data-a="restart">Nieuwe les</button></div></div>';
   }
   document.getElementById("app").innerHTML=h;
@@ -299,7 +317,7 @@ function render(){
 
 var app=document.getElementById("app");
 app.addEventListener("click",function(e){ var t=e.target.closest("[data-a]"); if(!t||t.disabled||t.type==="checkbox") return; A[t.getAttribute("data-a")](t.getAttribute("data-v")); });
-app.addEventListener("change",function(e){ var t=e.target; if(t.type==="checkbox"&&t.getAttribute("data-a")==="toggle") A.toggle(t.getAttribute("data-v")); });
+app.addEventListener("change",function(e){ var t=e.target; if(t.type!=="checkbox") return; var a=t.getAttribute("data-a"); if(a==="toggle") A.toggle(t.getAttribute("data-v")); if(a==="toggleReview") A.toggleReview(); });
 app.addEventListener("input",function(e){ if(e.target.id==="ans"){ S.typed=e.target.value; var b=document.getElementById("checkbtn"); if(b) b.disabled=!norm(S.typed); } });
 app.addEventListener("keydown",function(e){ if(e.target.id==="ans"&&e.key==="Enter"&&!S.answered&&norm(S.typed)) A.check(); });
 render();

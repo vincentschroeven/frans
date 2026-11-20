@@ -12,3 +12,7 @@ Online via GitHub Pages: https://vincentschroeven.github.io/frans/
 
 - iPhone (Safari): Delen → Zet op beginscherm.
 - Android (Chrome): menu ⋮ → App installeren of Toevoegen aan startscherm.
+
+## Herhaling
+
+Foute antwoorden worden op het toestel zelf bewaard (localStorage) en komen de volgende dag terug, daarna na 2, 4, 7 en 14 dagen zolang ze juist beantwoord worden.
