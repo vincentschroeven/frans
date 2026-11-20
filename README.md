@@ -7,3 +7,8 @@ Korte dagelijkse oefeningen Frans op weg naar niveau B1: voegwoorden, werkwoords
 - De vertalingen en voorbeeldzinnen zijn zelf geschreven en komen niet uit een lesboek.
 
 Online via GitHub Pages: https://vincentschroeven.github.io/frans/
+
+## Als app op je telefoon
+
+- iPhone (Safari): Delen → Zet op beginscherm.
+- Android (Chrome): menu ⋮ → App installeren of Toevoegen aan startscherm.

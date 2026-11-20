@@ -3,6 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#EEF0F3">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Frans">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
 <title>Frans oefenen</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
@@ -291,6 +299,7 @@ app.addEventListener("change",function(e){ var t=e.target; if(t.type==="checkbox
 app.addEventListener("input",function(e){ if(e.target.id==="ans"){ S.typed=e.target.value; var b=document.getElementById("checkbtn"); if(b) b.disabled=!norm(S.typed); } });
 app.addEventListener("keydown",function(e){ if(e.target.id==="ans"&&e.key==="Enter"&&!S.answered&&norm(S.typed)) A.check(); });
 render();
+if ("serviceWorker" in navigator) { try { navigator.serviceWorker.register("sw.js").catch(function(){}); } catch(e){} }
 </script>
 </body>
 </html>
